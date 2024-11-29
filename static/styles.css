@@ -1,0 +1,80 @@
+#navbar {
+    font-size: large;
+    width: 100%;
+}
+
+.homeButton {
+    width: 200px;
+    height: 60px;
+    object-fit: cover;
+}
+
+#scratchmapOptions { 
+    cursor: pointer;
+}
+
+#accountSettings { 
+    cursor: pointer;
+}
+
+.logo {
+    width: 300px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+
+.form-control {
+    margin: auto;
+    width: 200px; 
+}
+
+#register {
+    background-color: #8ab4d5;
+}
+
+#register:hover {
+    background-color: #9dbad0;
+}
+
+.flashes {
+    text-align: center;
+}
+
+.flashes .error {
+    color: red;
+}
+
+.flashes .message {
+    color: green;
+}
+
+hr {
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.checklist {
+    text-align: left;
+    padding-top: 10px;
+    padding-left: 80px;
+}
+
+.flag {
+    height: auto;
+    width: 25px;
+}
+
+#map {
+    height: 625px; 
+    width: 1200px;
+}
+
+@media (max-width: 1200px) {
+    #map { 
+        height: 300px;
+        width: 100%;
+    }
+}

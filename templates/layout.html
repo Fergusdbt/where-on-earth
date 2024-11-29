@@ -1,0 +1,364 @@
+<!doctype html>
+
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+        
+        <title>Where on Earth: {% block title %}{% endblock %}</title>
+
+        <!-- Logo icon to appear in tab -->
+        <link href="/static/icon.png" rel="icon">
+
+        <!-- Stylesheets from Bootstrap, Leaflet, Font Awesome and CSS respectively -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+        <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+        <link href="/static/styles.css" rel="stylesheet">
+
+    </head>
+
+    <body>
+
+        <!-- Navigation bar to appear across top of all pages -->
+        <nav class="navbar navbar-light navbar-expand-lg">
+
+            <div class="container-fluid">
+
+                <!-- Home button -->
+                <a class="navbar-brand" href="/">
+                    <img src="/static/link.png" class="homeButton img-responsive center-block d-inline-block align-text-top" alt="Where on Earth logo">
+                </a>
+
+                <!-- Dropdown menu button for mobile only -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navigation tabs for available pages -->
+                <div class="collapse navbar-collapse" id="navbar">
+
+                    {% if session["user_id"] %}
+
+                    <div class="navbar-nav ms-auto">
+
+                        <div class="nav-item dropdown pe-4">
+                            <a class="nav-link dropdown-toggle" id="scratchmapOptions" data-bs-toggle="dropdown" aria-expanded="false">
+                                Scratch Map
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" id="dropdownMenu">
+                                <a class="dropdown-item" href="/checklist">Checklists</a>
+                                <a class="dropdown-item" href="/scratchmap">World Map</a>
+                            </div>
+                        </div>
+
+                        <a class="nav-link pe-4" href="/pinboard">Pinboard</a>
+
+                        <!-- Dropdown menu for account settings -->
+                        <div class="nav-item dropdown">
+                            <a class="nav-link" id="accountSettings" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-cog"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-end" id="dropdownMenu">
+                                <a class="dropdown-item" href="/logout">Log Out</a>
+                                <a class="dropdown-item" href="/reset">Reset Password</a>
+                                <a class="dropdown-item" href="/delete">Delete Account</a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="navbar-nav ms-auto">
+                        <a class="nav-link" href="/login">Log In</a>
+                        <a class="nav-link" href="/register">Register</a>
+                    </div>
+
+                    {% endif %}
+
+                </div>
+            </div>
+        </nav>
+
+        <main class="container text-center">
+            {% block main %}{% endblock %}
+        </main>
+
+        <!-- Success and error messages to be displayed during registration and log in processes -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+
+        <footer class="flashes fixed-bottom">
+            {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+            {% endfor %}
+        </footer>
+
+        {% endif %}
+        {% endwith %}
+
+        
+        <!-- JavaScript from Bootstrap, Leaflet and JSON respectively -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+        
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    
+        <script src="https://unpkg.com/topojson/dist/topojson.min.js"></script>
+
+        <script>
+        
+            document.addEventListener('DOMContentLoaded', function() {
+
+                // JavaScript for dropdown buttons on checklist page
+                if (document.getElementsByClassName('checklist').length > 0) {
+
+                    const arrows = document.querySelectorAll('.arrow');
+
+                    const contentMap = {
+                        'Americas_Countries': 'Americas_Countries_List',
+                        'Americas_Territories': 'Americas_Territories_List',
+                        'Europe_Countries': 'Europe_Countries_List',
+                        'Europe_Territories': 'Europe_Territories_List',
+                        'Asia_Countries': 'Asia_Countries_List',
+                        'Asia_Territories': 'Asia_Territories_List',
+                        'Africa_Countries': 'Africa_Countries_List',
+                        'Africa_Territories': 'Africa_Territories_List',
+                        'Oceania_Countries': 'Oceania_Countries_List',
+                        'Oceania_Territories': 'Oceania_Territories_List'
+                    };
+
+                    arrows.forEach(button => {
+                        button.addEventListener('click', function(event) {
+                            event.preventDefault();
+                            dropdown(event);
+                        });
+                    });
+
+                    function dropdown(event) {
+
+                        const button = event.target;
+                        const contentID = contentMap[button.id];
+                        const content = document.getElementById(contentID);
+                            
+                        if (content.hidden) {
+                            content.hidden = false;
+                            button.innerHTML = "&#8679;"
+                        }
+
+                        else {
+                            content.hidden = true;
+                            button.innerHTML = "&#8681;"
+                        }
+        
+                    };
+
+                };
+
+
+                // JavaScript for Scratch Map page
+                if (document.getElementById('scratchmap')) { 
+
+                    // Set up map
+                    let setZoom;
+                    
+                    if (window.innerWidth < 1200) {
+                        setZoom = 1.2;
+                    } else {
+                        setZoom = 2.2;
+                    };
+
+                    var map = L.map('map', {
+                        worldCopyJump: true,
+                        minZoom: setZoom,
+                        maxBoundsViscosity: 1.0
+                    }).setView([20, 0], setZoom);
+
+                    var bounds = [[-57, -172], [84, 188]];
+                    map.setMaxBounds(bounds);
+
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                        maxZoom: 6
+                    }).addTo(map);  
+
+                    map.zoomControl.remove();
+
+                    L.control.zoom({
+                        position: 'topright'
+                    }).addTo(map);
+
+                    // Create array to store country codes 
+                    var visited_country_codes = [];
+
+                    // Fetch country data from app.py and select GeoJSON objects to add to map
+                    fetch('/scratchmap', {
+                        method: 'POST',
+                    })
+                    .then(response => response.json())
+                    .then(visited_countries => {
+                        visited_countries.forEach(country => {
+                            visited_country_codes.push(country.code);
+                        });
+                        return fetch('/static/map.geojson')
+                    })
+                    .then(response => response.json())
+                    .then(geojson_data => {
+                        geojson_data.features.forEach(feature => {
+                            if (visited_country_codes.includes(feature.properties.iso_a3)) {
+                                L.geoJson(feature, {
+                                    style: {  
+                                        color: 'green',
+                                        weight: 1,
+                                        fillOpacity: 0.5
+                                    }
+                                }).addTo(map);
+                            };
+                        });
+                    });
+                };
+            
+                // JavaScript for Pinboard page
+                if (document.getElementById('pin')) { 
+
+                    // Set up map
+                    let setZoom;
+                    
+                    if (window.innerWidth < 1200) {
+                        setZoom = 1.2;
+                    } else {
+                        setZoom = 2.2;
+                    };
+
+                    var map = L.map('map', {
+                        worldCopyJump: true,
+                        minZoom: setZoom,
+                        maxBoundsViscosity: 1.0
+                    }).setView([20, 0], setZoom);
+
+                    var bounds = [[-57, -172], [84, 188]];
+                    map.setMaxBounds(bounds);
+
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                        maxZoom: 18
+                    }).addTo(map);  
+
+                    map.zoomControl.remove();
+
+                    L.control.zoom({
+                        position: 'topright'
+                    }).addTo(map);
+
+                    // Create custom icon for markers
+                    const pin = L.icon({
+                        iconUrl: '/static/icons8-map-pin-64.png', 
+                        iconSize: [20, 20], 
+                        iconAnchor: [10, 20], 
+                        popupAnchor: [0, -20], 
+                    });
+
+                    // Create array to track markers
+                    var markers = [];
+
+                    // Remove marker from map and post data to app.py to manage database
+                    function removeMarker(marker) {
+                        for (var i = 0; i < markers.length; i++) {
+                            if (markers[i] === marker) {
+                                map.removeLayer(markers[i]);
+                                fetch('/markerRemoved', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({
+                                        marker: {
+                                            latitude: marker.getLatLng().lat,
+                                            longitude: marker.getLatLng().lng
+                                        }
+                                    })
+                                })
+                                .then(response => response.json())
+                                markers.splice(i, 1);
+                            }
+                        }
+                    }
+
+                    // Create pop-up 'delete' button
+                    function popupDelete(marker) {
+                        var popupContent = document.createElement('div');
+
+                        var button = document.createElement('button');
+                        button.className = 'btn btn-sm btn-outline-danger';
+                        button.textContent = 'Delete';
+
+                        button.addEventListener('click', function() {
+                            removeMarker(marker);
+                        });
+
+                        popupContent.appendChild(button);
+
+                        return popupContent;
+                    }
+
+                    // Add new marker with pop-up to map and post data to app.py to manage database
+                    function addMarker(latlng) {
+                        var marker = L.marker(latlng, { icon: pin }).addTo(map);
+
+                        popupContent = popupDelete(marker);
+
+                        marker.bindPopup(popupContent);
+                        markers.push(marker);
+
+                        fetch('/pinboard', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                marker: {
+                                    latitude: marker.getLatLng().lat,
+                                    longitude: marker.getLatLng().lng
+                                }
+                            })
+                        })
+                        .then(response => response.json())
+                    }
+
+                    // Fetch marker data from app.py and add markers to map
+                    fetch('/uploadMarkers', {
+                        method: 'POST',
+                    })
+                    .then(response => response.json())
+                    .then(saved_markers => {
+                        saved_markers.forEach(marker => {
+
+                            var latlng = [marker.latitude, marker.longitude];
+                            var saved_marker = L.marker(latlng, { icon: pin }).addTo(map);
+
+                            popupContent = popupDelete(saved_marker);
+
+                            saved_marker.bindPopup(popupContent);
+                            markers.push(saved_marker);
+                        });
+                    })
+
+                    // Add event listener to map for clicks
+                    map.on('click', function(e) {
+                        addMarker(e.latlng);
+                    });
+
+                };
+            
+            });
+
+        </script>
+
+    </body>
+
+</html>

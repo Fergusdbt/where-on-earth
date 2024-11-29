@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Reset Password
+{% endblock %}
+
+{% block main %}
+
+<img src="/static/logo.png" class="logo img-responsive center-block" alt="Where on Earth logo">
+
+<form action="/reset" method="post">
+
+    <div class="form-group pb-3">
+        <label class="form-label" for="current_password">Old password</label>
+        <input class="form-control input-lg" autofocus required id="current_password" name="current_password" placeholder="Current Password" type="password">
+    </div>
+
+    <div class="form-group pb-3">
+        <label class="form-label" for="new_password">New password</label>
+        <input class="form-control input-lg" required id="new_password" name="new_password" placeholder="New password" type="password">
+    </div>
+
+    <div class="form-group pb-3">
+        <label class="form-label" for="confirmation">Confirm new password</label>
+        <input class="form-control input-lg" required id="confirmation" name="confirmation" placeholder="Confirm new password" type="password">
+    </div>
+
+    <button type="submit" class="btn btn-danger btn-lg">Reset password</button>
+
+</form>
+
+{% endblock %}

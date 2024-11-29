@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block main %}
+    
+    <img src="/static/logo.png" class="logo img-responsive center-block" alt="Where on Earth logo">
+
+    <h1>{{ username }}</h1>
+    <h5>has been to</h5>
+    <h1>{{ country_count }} {% if country_count == 1 %} country {% else %} countries {% endif %}</h1>
+    <h5>and {{ territory_count }} {% if territory_count == 1 %} territory {% else %} territories {% endif %}</h5>
+
+{% endblock %}

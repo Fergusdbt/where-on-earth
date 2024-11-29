@@ -1,0 +1,211 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Checklist
+{% endblock %}
+
+{% block main %}
+
+    <h1>Checklists</h1>
+
+    <h4>by region</h4> 
+
+    <form action="/checklist" method="post">
+
+        <div class="container">
+
+            <div class="row">
+
+                <div class="col-xl">
+
+                    <h1 class="pt-5">Americas</h1>
+
+                    <hr>
+
+                    <h4 style="display: inline;">Countries</h4>
+                    <button style="display: inline;" class="arrow btn btn-sm btn-outline-success" id="Americas_Countries">&#8681;</button>
+
+                    <div class="checklist" id="Americas_Countries_List" hidden>
+                        {% for country in countries if country.region == "Americas" and country.unMember == "1" %}
+                        <p>
+                        <input type="checkbox" name="country" id="{{ country.name }}" value="{{ country.name }}" {% if country.name in saved_countries %} checked {% endif %}>
+                        <img src="{{ country.flag }}" class="flag" alt="flag">
+                        <label for="{{ country.name }}">{{ country.name }}</label>
+                        </p>
+                        {% endfor %}
+                    </div>
+
+                    <hr>
+
+                    <h4 style="display: inline;">Territories</h4>
+                    <button style="display: inline;" class="arrow btn btn-sm btn-outline-success" id="Americas_Territories">&#8681;</button>
+
+                    <div class="checklist" id="Americas_Territories_List" hidden>
+                        {% for country in countries if country.region == "Americas" and country.unMember != "1" %}
+                        <p>
+                        <input type="checkbox" name="country" id="{{ country.name }}" value="{{ country.name }}" {% if country.name in saved_countries %} checked {% endif %}>
+                        <img src="{{ country.flag }}" class="flag" alt="flag">
+                        <label for="{{ country.name }}">{{ country.name }}</label>
+                        </p>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+                <div class="col-xl">
+
+                    <h1 class="pt-5">Europe</h1>
+
+                    <hr>
+
+                    <h4 style="display: inline;">Countries</h4>
+                    <button style="display: inline;" class="arrow btn btn-sm btn-outline-success" id="Europe_Countries">&#8681;</button>
+
+                    <div class="checklist" id="Europe_Countries_List" hidden>
+                        {% for country in countries if country.region == "Europe" and country.unMember == "1" %}
+                        <p>
+                        <input type="checkbox" name="country" id="{{ country.name }}" value="{{ country.name }}" {% if country.name in saved_countries %} checked {% endif %}>
+                        <img src="{{ country.flag }}" class="flag" alt="flag">
+                        <label for="{{ country.name }}">{{ country.name }}</label>
+                        </p>
+                        {% endfor %}
+                    </div>
+
+                    <hr>
+
+                    <h4 style="display: inline;">Territories</h4>
+                    <button style="display: inline;" class="arrow btn btn-sm btn-outline-success" id="Europe_Territories">&#8681;</button>
+
+                    <div class="checklist" id="Europe_Territories_List" hidden>
+                        {% for country in countries if country.region == "Europe" and country.unMember != "1" %}
+                        <p>
+                        <input type="checkbox" name="country" id="{{ country.name }}" value="{{ country.name }}" {% if country.name in saved_countries %} checked {% endif %}>
+                        <img src="{{ country.flag }}" class="flag" alt="flag">
+                        <label for="{{ country.name }}">{{ country.name }}</label>
+                        </p>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+                <div class="col-xl">
+
+                    <h1 class="pt-5">Asia</h1>
+
+                    <hr>
+
+                    <h4 style="display: inline;">Countries</h4>
+                    <button style="display: inline;" class="arrow btn btn-sm btn-outline-success" id="Asia_Countries">&#8681;</button>
+
+                    <div class="checklist" id="Asia_Countries_List" hidden>
+                        {% for country in countries if country.region == "Asia" and country.unMember == "1" %}
+                        <p>
+                        <input type="checkbox" name="country" id="{{ country.name }}" value="{{ country.name }}" {% if country.name in saved_countries %} checked {% endif %}>
+                        <img src="{{ country.flag }}" class="flag" alt="flag">
+                        <label for="{{ country.name }}">{{ country.name }}</label>
+                        </p>
+                        {% endfor %}
+                    </div>
+
+                    <hr>
+
+                    <h4 style="display: inline;">Territories</h4>
+                    <button style="display: inline;" class="arrow btn btn-sm btn-outline-success" id="Asia_Territories">&#8681;</button>
+
+                    <div class="checklist" id="Asia_Territories_List" hidden>
+                        {% for country in countries if country.region == "Asia" and country.unMember != "1" %}
+                        <p>
+                        <input type="checkbox" name="country" id="{{ country.name }}" value="{{ country.name }}" {% if country.name in saved_countries %} checked {% endif %}>
+                        <img src="{{ country.flag }}" class="flag" alt="flag">
+                        <label for="{{ country.name }}">{{ country.name }}</label>
+                        </p>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="row pb-5">
+
+                <div class="col-xl">
+
+                    <h1 class="pt-5">Africa</h1>
+    
+                    <hr>
+
+                    <h4 style="display: inline;">Countries</h4>
+                    <button style="display: inline;" class="arrow btn btn-sm btn-outline-success" id="Africa_Countries">&#8681;</button>
+
+                    <div class="checklist" id="Africa_Countries_List" hidden>
+                        {% for country in countries if country.region == "Africa" and country.unMember == "1" %}
+                        <p>
+                        <input type="checkbox" name="country" id="{{ country.name }}" value="{{ country.name }}" {% if country.name in saved_countries %} checked {% endif %}>
+                        <img src="{{ country.flag }}" class="flag" alt="flag">
+                        <label for="{{ country.name }}">{{ country.name }}</label>
+                        </p>
+                        {% endfor %}
+                    </div>
+    
+                    <hr>
+
+                    <h4 style="display: inline;">Territories</h4>
+                    <button style="display: inline;" class="arrow btn btn-sm btn-outline-success" id="Africa_Territories">&#8681;</button>
+    
+                    <div class="checklist" id="Africa_Territories_List" hidden>
+                        {% for country in countries if country.region == "Africa" and country.unMember != "1" %}
+                        <p>
+                        <input type="checkbox" name="country" id="{{ country.name }}" value="{{ country.name }}" {% if country.name in saved_countries %} checked {% endif %}>
+                        <img src="{{ country.flag }}" class="flag" alt="flag">
+                        <label for="{{ country.name }}">{{ country.name }}</label>
+                        </p>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+                <div class="col-xl">
+
+                    <h1 class="pt-5">Oceania</h1>
+
+                    <hr>
+
+                    <h4 style="display: inline;">Countries</h4>
+                    <button style="display: inline;" class="arrow btn btn-sm btn-outline-success" id="Oceania_Countries">&#8681;</button>
+
+                    <div class="checklist" id="Oceania_Countries_List" hidden>
+                        {% for country in countries if country.region == "Oceania" and country.unMember == "1" %}
+                        <p>
+                        <input type="checkbox" name="country" id="{{ country.name }}" value="{{ country.name }}" {% if country.name in saved_countries %} checked {% endif %}>
+                        <img src="{{ country.flag }}" class="flag" alt="flag">
+                        <label for="{{ country.name }}">{{ country.name }}</label>
+                        </p>
+                        {% endfor %}
+                    </div>
+
+                    <hr>
+
+                    <h4 style="display: inline;">Territories</h4>
+                    <button style="display: inline;" class="arrow btn btn-sm btn-outline-success" id="Oceania_Territories">&#8681;</button>
+
+                    <div class="checklist" id="Oceania_Territories_List" hidden>
+                        {% for country in countries if country.region == "Oceania" and country.unMember != "1" %}
+                        <p>
+                        <input type="checkbox" name="country" id="{{ country.name }}" value="{{ country.name }}" {% if country.name in saved_countries %} checked {% endif %}>
+                        <img src="{{ country.flag }}" class="flag" alt="flag">
+                        <label for="{{ country.name }}">{{ country.name }}</label>
+                        </p>
+                        {% endfor %}
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-success btn-lg my-3">Save</button>
+
+    </form>
+
+{% endblock %}
